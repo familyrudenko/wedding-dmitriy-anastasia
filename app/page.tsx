@@ -51,6 +51,7 @@ function getCountdown() {
 
 export default function Home() {
   const [slider, setSlider] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [countdown, setCountdown] = useState(getCountdown);
@@ -60,6 +61,7 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const draggingRef = useRef(false);
   const sliderValueRef = useRef(0);
+  const pointerOffsetRef = useRef(0);
 
   useEffect(() => {
     const timer = window.setInterval(() => setCountdown(getCountdown()), 1000);
@@ -135,12 +137,20 @@ export default function Home() {
 
   function moveSwipe(clientX: number, element: HTMLDivElement) {
     const rect = element.getBoundingClientRect();
+    const thumbSize = 52;
+    const travel = Math.max(1, rect.width - thumbSize);
     const value = Math.max(
       0,
-      Math.min(100, ((clientX - rect.left) / rect.width) * 100),
+      Math.min(
+        100,
+        ((clientX - pointerOffsetRef.current - rect.left - thumbSize / 2) /
+          travel) *
+          100,
+      ),
     );
     sliderValueRef.current = value;
     setSlider(value);
+    return value;
   }
 
   const mapUrl =
@@ -178,7 +188,12 @@ export default function Home() {
           <div className="unlock-copy">
             <p className="unlock-kicker">WEDDING DAY</p>
             <p className="unlock-hint">Разблокируйте приглашение</p>
-            <div className="swipe" style={{ "--progress": `${slider * 0.82}%` } as React.CSSProperties}>
+            <div
+              className={`swipe ${isDragging ? "is-dragging" : ""}`}
+              style={{
+                "--progress": `calc(${slider}% - ${slider * 0.52}px)`,
+              } as React.CSSProperties}
+            >
               <span className="swipe-arrow" aria-hidden="true">›</span>
               <span className="swipe-dots" aria-hidden="true">
                 {Array.from({ length: 11 }).map((_, index) => (
@@ -195,9 +210,18 @@ export default function Home() {
                 aria-valuemax={100}
                 aria-valuenow={Math.round(slider)}
                 onPointerDown={(event) => {
+                  const rect = event.currentTarget.getBoundingClientRect();
+                  const thumbCenter =
+                    rect.left +
+                    (slider / 100) * (rect.width - 52) +
+                    26;
+                  if (Math.abs(event.clientX - thumbCenter) > 38) return;
+
+                  event.preventDefault();
                   draggingRef.current = true;
+                  setIsDragging(true);
+                  pointerOffsetRef.current = event.clientX - thumbCenter;
                   event.currentTarget.setPointerCapture(event.pointerId);
-                  moveSwipe(event.clientX, event.currentTarget);
                 }}
                 onPointerMove={(event) => {
                   if (draggingRef.current) {
@@ -206,17 +230,18 @@ export default function Home() {
                   }
                 }}
                 onPointerUp={(event) => {
-                  draggingRef.current = false;
-                  const rect = event.currentTarget.getBoundingClientRect();
-                  const releasedAt = Math.max(
-                    0,
-                    Math.min(100, ((event.clientX - rect.left) / rect.width) * 100),
+                  if (!draggingRef.current) return;
+
+                  const finalValue = moveSwipe(
+                    event.clientX,
+                    event.currentTarget,
                   );
-                  const finalValue = Math.max(sliderValueRef.current, releasedAt);
+                  draggingRef.current = false;
+                  setIsDragging(false);
                   if (event.currentTarget.hasPointerCapture(event.pointerId)) {
                     event.currentTarget.releasePointerCapture(event.pointerId);
                   }
-                  if (finalValue >= 78) {
+                  if (finalValue >= 92) {
                     unlock();
                   } else {
                     sliderValueRef.current = 0;
@@ -225,6 +250,7 @@ export default function Home() {
                 }}
                 onPointerCancel={() => {
                   draggingRef.current = false;
+                  setIsDragging(false);
                   sliderValueRef.current = 0;
                   setSlider(0);
                 }}
