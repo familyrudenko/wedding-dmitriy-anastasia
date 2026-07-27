@@ -58,7 +58,8 @@ export default function Home() {
   const [slide, setSlide] = useState(0);
   const [sent, setSent] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const invitationRef = useRef<HTMLElement>(null);
+  const draggingRef = useRef(false);
+  const sliderValueRef = useRef(0);
 
   useEffect(() => {
     const timer = window.setInterval(() => setCountdown(getCountdown()), 1000);
@@ -85,6 +86,11 @@ export default function Home() {
     return () => document.removeEventListener("keydown", close);
   }, [map]);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle("invitation-locked", !unlocked);
+    return () => document.documentElement.classList.remove("invitation-locked");
+  }, [unlocked]);
+
   const countdownItems = useMemo(
     () => [
       [countdown.days, "дней"],
@@ -95,20 +101,19 @@ export default function Home() {
     [countdown],
   );
 
-  async function unlock() {
+  function unlock() {
     if (unlocked) return;
+
+    // Mobile browsers allow autoplay only while the user's gesture is active.
+    const playAttempt = audioRef.current?.play();
+
+    draggingRef.current = false;
+    sliderValueRef.current = 100;
     setUnlocked(true);
     setSlider(100);
-    try {
-      await audioRef.current?.play();
-      setPlaying(true);
-    } catch {
-      setPlaying(false);
-    }
-    window.setTimeout(
-      () => invitationRef.current?.scrollIntoView({ behavior: "smooth" }),
-      180,
-    );
+    playAttempt
+      ?.then(() => setPlaying(true))
+      .catch(() => setPlaying(false));
   }
 
   async function toggleMusic() {
@@ -128,14 +133,14 @@ export default function Home() {
     setSent(true);
   }
 
-  function moveSwipe(event: React.PointerEvent<HTMLDivElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
+  function moveSwipe(clientX: number, element: HTMLDivElement) {
+    const rect = element.getBoundingClientRect();
     const value = Math.max(
       0,
-      Math.min(100, ((event.clientX - rect.left) / rect.width) * 100),
+      Math.min(100, ((clientX - rect.left) / rect.width) * 100),
     );
+    sliderValueRef.current = value;
     setSlider(value);
-    if (value > 82) void unlock();
   }
 
   const mapUrl =
@@ -160,8 +165,16 @@ export default function Home() {
         <source src={ASSETS.music} type="audio/mpeg" />
       </audio>
 
+      <div className="desktop-gate">
+        <div className="desktop-phone" aria-hidden="true">
+          <span />
+        </div>
+        <h1>Приглашение доступно на телефоне</h1>
+        <p>Пожалуйста, откройте эту страницу со смартфона.</p>
+      </div>
+
       <main>
-        <section className={`unlock-screen ${unlocked ? "is-unlocked" : ""}`}>
+        {!unlocked && <section className="unlock-screen">
           <div className="unlock-copy">
             <p className="unlock-kicker">WEDDING DAY</p>
             <p className="unlock-hint">Разблокируйте приглашение</p>
@@ -182,21 +195,41 @@ export default function Home() {
                 aria-valuemax={100}
                 aria-valuenow={Math.round(slider)}
                 onPointerDown={(event) => {
+                  draggingRef.current = true;
                   event.currentTarget.setPointerCapture(event.pointerId);
-                  moveSwipe(event);
+                  moveSwipe(event.clientX, event.currentTarget);
                 }}
                 onPointerMove={(event) => {
-                  if (event.buttons === 1) moveSwipe(event);
+                  if (draggingRef.current) {
+                    event.preventDefault();
+                    moveSwipe(event.clientX, event.currentTarget);
+                  }
                 }}
                 onPointerUp={(event) => {
+                  draggingRef.current = false;
+                  const rect = event.currentTarget.getBoundingClientRect();
+                  const releasedAt = Math.max(
+                    0,
+                    Math.min(100, ((event.clientX - rect.left) / rect.width) * 100),
+                  );
+                  const finalValue = Math.max(sliderValueRef.current, releasedAt);
                   if (event.currentTarget.hasPointerCapture(event.pointerId)) {
                     event.currentTarget.releasePointerCapture(event.pointerId);
                   }
-                  const rect = event.currentTarget.getBoundingClientRect();
-                  if ((event.clientX - rect.left) / rect.width <= 0.72) setSlider(0);
+                  if (finalValue >= 78) {
+                    unlock();
+                  } else {
+                    sliderValueRef.current = 0;
+                    setSlider(0);
+                  }
+                }}
+                onPointerCancel={() => {
+                  draggingRef.current = false;
+                  sliderValueRef.current = 0;
+                  setSlider(0);
                 }}
                 onKeyDown={(event) => {
-                  if (event.key === "End" || event.key === "ArrowRight") void unlock();
+                  if (event.key === "End" || event.key === "ArrowRight") unlock();
                 }}
               />
             </div>
@@ -211,9 +244,9 @@ export default function Home() {
               <span>Разблокируйте приглашение</span>
             </div>
           </div>
-        </section>
+        </section>}
 
-        <section ref={invitationRef} className="hero section-shell">
+        <section className="hero section-shell">
           <p className="hero-word hero-word-top reveal">WEDDING</p>
           <div className="hero-portrait reveal">
             <img src={ASSETS.heroPhoto} alt="Сергей и Наталия" />
@@ -228,7 +261,10 @@ export default function Home() {
               onClick={toggleMusic}
               aria-label={playing ? "Поставить музыку на паузу" : "Включить музыку"}
             >
-              <span>{playing ? "Ⅱ" : "▶"}</span>
+              <span
+                className={playing ? "pause-glyph" : "play-glyph"}
+                aria-hidden="true"
+              />
             </button>
           </div>
         </section>
@@ -269,10 +305,8 @@ export default function Home() {
           <h2 className="section-title reveal">PROGRAM<br />OF THE DAY</h2>
           <div className="program-line" aria-hidden="true" />
           <div className="program-grid">
-            {program.map((item, index) => (
+            {program.map((item) => (
               <article className="program-card reveal" key={item.time}>
-                <span className="program-index">0{index + 1}</span>
-                <span className="program-dot" aria-hidden="true" />
                 <time>{item.time}</time>
                 <p>{item.title}</p>
               </article>
