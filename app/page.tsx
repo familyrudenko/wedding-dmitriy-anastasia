@@ -23,20 +23,20 @@ const ASSETS = {
 
 // Тексты, дата и адреса можно менять в одном месте.
 const WEDDING = {
-  groom: "СЕРГЕЙ",
-  bride: "НАТАЛИЯ",
-  date: "2025-09-14T12:30:00+03:00",
-  displayDate: "14 | 09 | 2025",
+  groom: "ДМИТРИЙ",
+  bride: "АНАСТАСИЯ",
+  date: "2026-09-26T15:00:00+03:00",
+  displayDate: "26 | 09 | 2026",
   churchAddress:
-    "Ленинградская обл., Всеволожский район, дер. Юкки, Ленинградское шоссе, дом 24Б, Храм Рождества Иоанна Предтечи",
-  venueAddress: "Банкетный зал «Амулет», ул. Восстания, д. 35.",
+    "улица Миллера, 58, Симферополь, Республика Крым, 295003",
+  venueAddress: "Киевская улица, 80, Симферополь, Республика Крым, 295034",
 };
 
 const program = [
-  { time: "12:30", title: "Сбор гостей у храма" },
-  { time: "13:00", title: "Венчание" },
-  { time: "14:00", title: "Окончание церемонии" },
-  { time: "16:00", title: "Начало банкета" },
+  { time: "14:45", title: "Сбор гостей у ЗАГСа" },
+  { time: "14:55", title: "Welcom Drink" },
+  { time: "15:30", title: "Фотосессия" },
+  { time: "20:00", title: "Свадебный банкет" },
 ];
 
 function getCountdown() {
@@ -342,7 +342,7 @@ export default function Home() {
         <section className="hero section-shell">
           <p className="hero-word hero-word-top reveal">WEDDING</p>
           <div className="hero-portrait reveal">
-            <img src={ASSETS.heroPhoto} alt="Сергей и Наталия" />
+            <img src={ASSETS.heroPhoto} alt="Дмитрий и Анастасия" />
             <span>{WEDDING.groom} &nbsp;И&nbsp; {WEDDING.bride}</span>
           </div>
           <p className="hero-word hero-word-bottom reveal">DAY</p>
@@ -412,13 +412,13 @@ export default function Home() {
           <div className="location-grid">
             <article className="location-card reveal">
               <p className="eyebrow">МЕСТО ПРОВЕДЕНИЯ ЦЕРЕМОНИИ</p>
-              <img src={ASSETS.church} alt="Храм Рождества Иоанна Предтечи" />
+              <img src={ASSETS.church} alt="ЗАГС улица Миллера, 58" />
               <p className="address">{WEDDING.churchAddress}</p>
               <button type="button" onClick={() => setMap("church")}>Открыть карту</button>
             </article>
             <article className="location-card reveal">
               <p className="eyebrow">БАНКЕТ В РЕСТОРАНЕ</p>
-              <img src={ASSETS.restaurant} alt="Банкетный зал Амулет" />
+              <img src={ASSETS.restaurant} alt="Банкетный зал Чистые пруды" />
               <p className="address">{WEDDING.venueAddress}</p>
               <button type="button" onClick={() => setMap("venue")}>Открыть карту</button>
             </article>
@@ -427,7 +427,7 @@ export default function Home() {
 
         <section className="dress section-shell">
           <div className="dress-copy reveal">
-            <p className="eyebrow">август</p>
+            <p className="eyebrow">сентябрь</p>
             <h2 className="section-title">DRESS CODE</h2>
             <p>
               Мы рады сообщить, что дресс-кода на нашей свадьбе не будет. Тем
@@ -550,14 +550,14 @@ export default function Home() {
           )}
           <div className="farewell reveal">
             <strong>Мы будем счастливы видеть Вас<br />на нашем празднике!</strong>
-            <p>С любовью, Сергей и Наталия!</p>
+            <p>С любовью, Дмитрий и Анастасия!</p>
           </div>
         </section>
       </main>
 
       <footer>
-        <p>Design by Elizaveta Sukhaia</p>
-        <span>EDITABLE WEDDING INVITATION</span>
+        <p>Design by Dmitriy & Anastasia</p>
+        <span>WEDDING</span>
       </footer>
 
       {map && (
