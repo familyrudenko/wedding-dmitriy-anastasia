@@ -52,6 +52,7 @@ function getCountdown() {
 export default function Home() {
   const [slider, setSlider] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [unlocking, setUnlocking] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [countdown, setCountdown] = useState(getCountdown);
@@ -62,6 +63,8 @@ export default function Home() {
   const draggingRef = useRef(false);
   const sliderValueRef = useRef(0);
   const pointerOffsetRef = useRef(0);
+  const unlockingRef = useRef(false);
+  const unlockTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const timer = window.setInterval(() => setCountdown(getCountdown()), 1000);
@@ -72,14 +75,32 @@ export default function Home() {
     const observer = new IntersectionObserver(
       (entries) =>
         entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("is-visible");
+          entry.target.classList.toggle("is-visible", entry.isIntersecting);
         }),
-      { threshold: 0.12 },
+      { threshold: 0.16, rootMargin: "0px 0px -7% 0px" },
     );
-    const items = document.querySelectorAll(".reveal");
-    items.forEach((item) => observer.observe(item));
+    const items = document.querySelectorAll<HTMLElement>(".reveal");
+    items.forEach((item, index) => {
+      const stagger = item.classList.contains("program-card")
+        ? Array.from(item.parentElement?.children ?? []).indexOf(item)
+        : index % 3;
+      item.style.setProperty(
+        "--reveal-delay",
+        `${Math.max(0, stagger) * 110}ms`,
+      );
+      observer.observe(item);
+    });
     return () => observer.disconnect();
   }, []);
+
+  useEffect(
+    () => () => {
+      if (unlockTimerRef.current !== null) {
+        window.clearTimeout(unlockTimerRef.current);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!map) return;
@@ -104,18 +125,27 @@ export default function Home() {
   );
 
   function unlock() {
-    if (unlocked) return;
+    if (unlocked || unlockingRef.current) return;
 
     // Mobile browsers allow autoplay only while the user's gesture is active.
     const playAttempt = audioRef.current?.play();
 
     draggingRef.current = false;
     sliderValueRef.current = 100;
-    setUnlocked(true);
+    unlockingRef.current = true;
+    setIsDragging(false);
+    setUnlocking(true);
     setSlider(100);
     playAttempt
       ?.then(() => setPlaying(true))
       .catch(() => setPlaying(false));
+
+    unlockTimerRef.current = window.setTimeout(() => {
+      setUnlocked(true);
+      setUnlocking(false);
+      unlockingRef.current = false;
+      unlockTimerRef.current = null;
+    }, 860);
   }
 
   async function toggleMusic() {
@@ -183,8 +213,8 @@ export default function Home() {
         <p>Пожалуйста, откройте эту страницу со смартфона.</p>
       </div>
 
-      <main>
-        {!unlocked && <section className="unlock-screen">
+      <main className={unlocking ? "is-unlocking" : ""}>
+        {!unlocked && <section className={`unlock-screen ${unlocking ? "is-opening" : ""}`}>
           <div className="unlock-copy">
             <p className="unlock-kicker">WEDDING DAY</p>
             <p className="unlock-hint">Разблокируйте приглашение</p>
