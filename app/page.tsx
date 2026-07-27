@@ -59,6 +59,8 @@ export default function Home() {
   const [map, setMap] = useState<"church" | "venue" | null>(null);
   const [slide, setSlide] = useState(0);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [formError, setFormError] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
   const draggingRef = useRef(false);
   const sliderValueRef = useRef(0);
@@ -160,9 +162,44 @@ export default function Home() {
     }
   }
 
-  function submitForm(event: FormEvent<HTMLFormElement>) {
+  async function submitForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSent(true);
+    setSending(true);
+    setFormError("");
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const response = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          attendance: data.get("attendance"),
+          website: data.get("website"),
+        }),
+      });
+      const result = (await response.json()) as {
+        ok?: boolean;
+        error?: string;
+      };
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || "Не удалось отправить ответ.");
+      }
+
+      form.reset();
+      setSent(true);
+    } catch (error) {
+      setFormError(
+        error instanceof Error
+          ? error.message
+          : "Не удалось отправить ответ. Попробуйте ещё раз.",
+      );
+    } finally {
+      setSending(false);
+    }
   }
 
   function moveSwipe(clientX: number, element: HTMLDivElement) {
@@ -451,40 +488,64 @@ export default function Home() {
 
         <section className="rsvp section-shell">
           <h2 className="section-title reveal">АНКЕТА</h2>
+          <p className="rsvp-lead reveal">
+            Пожалуйста, подтвердите своё присутствие — это займёт меньше минуты.
+          </p>
           {sent ? (
             <div className="success reveal is-visible" role="status">
               <span>СПАСИБО!</span>
-              <p>Ваш ответ сохранён в этой демонстрационной копии.</p>
+              <p>Ваш ответ отправлен Сергею и Наталии.</p>
               <button type="button" onClick={() => setSent(false)}>Заполнить ещё раз</button>
             </div>
           ) : (
             <form className="rsvp-form reveal" onSubmit={submitForm}>
+              <div className="form-heading">
+                <span>RSVP</span>
+                <h3>Будем ждать ваш ответ</h3>
+              </div>
               <label className="name-field">
-                <strong>Введите Ваше имя и фамилию</strong>
+                <strong>Имя и фамилия</strong>
                 <input
                   type="text"
                   name="name"
-                  placeholder="Укажите имя и фамилию каждого гостя"
+                  placeholder="Например, Анна Иванова"
+                  autoComplete="name"
+                  maxLength={120}
                   required
                 />
               </label>
-              <fieldset>
-                <legend>Сможете ли Вы присутствовать на торжестве?</legend>
-                <label><input type="radio" name="attendance" value="yes" required />Я приду/ Мы придем</label>
-                <label><input type="radio" name="attendance" value="no" />Очень жаль, но прийти не получится</label>
+              <fieldset className="attendance-field">
+                <legend>Сможете ли вы присутствовать на свадьбе?</legend>
+                <label className="answer-option">
+                  <input type="radio" name="attendance" value="yes" required />
+                  <span className="answer-mark" aria-hidden="true" />
+                  <span>Да, с удовольствием!</span>
+                </label>
+                <label className="answer-option">
+                  <input type="radio" name="attendance" value="no" />
+                  <span className="answer-mark" aria-hidden="true" />
+                  <span>К сожалению, не смогу</span>
+                </label>
               </fieldset>
-              <fieldset>
-                <legend>Сможете ли Вы присутствовать на венчании?</legend>
-                <label><input type="radio" name="church" value="yes" required />Да</label>
-                <label><input type="radio" name="church" value="banquet" />Нет, приеду/приедем сразу на банкет</label>
-                <label><input type="radio" name="church" value="other" />Свой вариант</label>
-              </fieldset>
-              <fieldset>
-                <legend>Предпочтения по горячему блюду:</legend>
-                <label><input type="radio" name="food" value="fish" required />Рыба</label>
-                <label><input type="radio" name="food" value="meat" />Мясо</label>
-              </fieldset>
-              <button className="submit-button" type="submit">Отправить</button>
+              <label className="website-field" aria-hidden="true">
+                Не заполняйте это поле
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </label>
+              {formError && (
+                <p className="form-error" role="alert">{formError}</p>
+              )}
+              <button
+                className="submit-button"
+                type="submit"
+                disabled={sending}
+              >
+                {sending ? "Отправляем..." : "Отправить ответ"}
+              </button>
             </form>
           )}
           <div className="farewell reveal">
