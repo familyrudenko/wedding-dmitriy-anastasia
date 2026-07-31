@@ -11,7 +11,7 @@ const ASSETS = {
   heroPhoto: "/assets/hero-photo.webp",
   music: "/assets/wedding-music-128.mp3",
   church: "/assets/ceremony-rings.webp",
-  restaurant: "/assets/venue-1.webp",
+  restaurant: "/assets/banquet-restaurant.webp",
   detailsPhoto: "/assets/details-placeholder.webp",
   history: {
     bouquet: "/assets/history-bouquet.webp",
