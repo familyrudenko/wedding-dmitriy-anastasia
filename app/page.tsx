@@ -10,7 +10,7 @@ const ASSETS = {
   unlockFallback: "/assets/unlock-poster.jpg",
   heroPhoto: "/assets/hero-photo.webp",
   music: "/assets/wedding-music-128.mp3",
-  church: "/assets/venue-2.webp",
+  church: "/assets/ceremony-rings.webp",
   restaurant: "/assets/venue-1.webp",
   detailsPhoto: "/assets/details-placeholder.webp",
   history: {
