@@ -16,7 +16,7 @@ const ASSETS = {
   history: {
     bouquet: "/assets/history-bouquet.webp",
     road: "/assets/history-road-7.webp",
-    proposal: "/assets/history-proposal.webp",
+    proposal: "/assets/history-proposal-8.webp",
   },
   dress: [
     "/assets/dress-1.webp",
