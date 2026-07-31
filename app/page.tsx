@@ -13,6 +13,8 @@ const ASSETS = {
   church: "/assets/ceremony-rings.webp",
   restaurant: "/assets/banquet-restaurant.webp",
   detailsPhoto: "/assets/details-photo-9.webp",
+  brideSolo: "/assets/bride-solo-10.webp",
+  groomSolo: "/assets/groom-solo-11.webp",
   history: {
     bouquet: "/assets/history-bouquet.webp",
     road: "/assets/history-road-7.webp",
@@ -393,6 +395,27 @@ export default function Home() {
                 <span>И</span>
                 {WEDDING.bride}
               </h1>
+              <div className="couple-portraits" aria-label="Жених и невеста">
+                <figure className="couple-portrait couple-portrait-bride reveal">
+                  <img
+                    src={ASSETS.brideSolo}
+                    alt="Анастасия"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>АНАСТАСИЯ</figcaption>
+                </figure>
+                <span className="couple-portrait-divider" aria-hidden="true">И</span>
+                <figure className="couple-portrait couple-portrait-groom reveal">
+                  <img
+                    src={ASSETS.groomSolo}
+                    alt="Дмитрий"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>ДМИТРИЙ</figcaption>
+                </figure>
+              </div>
             </div>
             <div className="welcome-copy reveal">
               <h2>ДОРОГИЕ ГОСТИ!</h2>
