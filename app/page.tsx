@@ -10,7 +10,7 @@ const ASSETS = {
   unlockFallback: "/assets/unlock.gif",
   heroPhoto: "/assets/hero-photo.png",
   heroVideo: "/assets/hero-video.mp4",
-  music: "/assets/music.mp3",
+  music: "/assets/wedding-music.mp3",
   church: "/assets/venue-2.jpg",
   restaurant: "/assets/venue-1.jpg",
   detailsPhoto: "/assets/details-placeholder.jpg",
