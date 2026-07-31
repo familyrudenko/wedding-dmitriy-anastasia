@@ -4,26 +4,25 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 // Все заменяемые файлы собраны здесь.
 const ASSETS = {
-  silk: "/assets/silk-frame.png",
-  silkVideo: "/assets/silk-video.mp4",
-  unlockVideo: "/assets/unlock-video.mp4",
-  unlockFallback: "/assets/unlock.gif",
-  heroPhoto: "/assets/hero-photo.png",
-  heroVideo: "/assets/hero-video.mp4",
-  music: "/assets/wedding-music.mp3",
-  church: "/assets/venue-2.jpg",
-  restaurant: "/assets/venue-1.jpg",
-  detailsPhoto: "/assets/details-placeholder.jpg",
+  silk: "/assets/silk-frame.webp",
+  silkVideo: "/assets/silk-video-mobile.mp4",
+  unlockVideo: "/assets/unlock-video-mobile.mp4",
+  unlockFallback: "/assets/unlock-poster.jpg",
+  heroPhoto: "/assets/hero-photo.webp",
+  music: "/assets/wedding-music-128.mp3",
+  church: "/assets/venue-2.webp",
+  restaurant: "/assets/venue-1.webp",
+  detailsPhoto: "/assets/details-placeholder.webp",
   history: {
-    bouquet: "/assets/history-bouquet.jpg",
-    road: "/assets/history-road.jpg",
-    proposal: "/assets/history-proposal.jpg",
+    bouquet: "/assets/history-bouquet.webp",
+    road: "/assets/history-road.webp",
+    proposal: "/assets/history-proposal.webp",
   },
   dress: [
-    "/assets/dress-1.png",
-    "/assets/dress-2.jpg",
-    "/assets/dress-3.jpg",
-    "/assets/dress-4.jpg",
+    "/assets/dress-1.webp",
+    "/assets/dress-2.webp",
+    "/assets/dress-3.webp",
+    "/assets/dress-4.webp",
   ],
 };
 
@@ -233,17 +232,20 @@ export default function Home() {
 
   return (
     <>
-      <video
-        className="fabric-video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster={ASSETS.silk}
-        aria-hidden="true"
-      >
-        <source src={ASSETS.silkVideo} type="video/mp4" />
-      </video>
+      {unlocked && (
+        <video
+          className="fabric-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={ASSETS.silk}
+          aria-hidden="true"
+        >
+          <source src={ASSETS.silkVideo} type="video/mp4" />
+        </video>
+      )}
       <audio ref={audioRef} loop preload="metadata">
         <source src={ASSETS.music} type="audio/mpeg" />
       </audio>
@@ -334,7 +336,14 @@ export default function Home() {
             </div>
           </div>
           <div className="unlock-media">
-            <video autoPlay muted loop playsInline poster={ASSETS.unlockFallback}>
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              poster={ASSETS.unlockFallback}
+            >
               <source src={ASSETS.unlockVideo} type="video/mp4" />
             </video>
             <div className="unlock-shade" />
@@ -348,7 +357,12 @@ export default function Home() {
         <section className="hero section-shell">
           <p className="hero-word hero-word-top reveal">WEDDING</p>
           <div className="hero-portrait reveal">
-            <img src={ASSETS.heroPhoto} alt="Дмитрий и Анастасия" />
+            <img
+              src={ASSETS.heroPhoto}
+              alt="Дмитрий и Анастасия"
+              decoding="async"
+              fetchPriority="high"
+            />
             <span>{WEDDING.groom} &nbsp;И&nbsp; {WEDDING.bride}</span>
           </div>
           <p className="hero-word hero-word-bottom reveal">DAY</p>
@@ -418,13 +432,23 @@ export default function Home() {
           <div className="location-grid">
             <article className="location-card reveal">
               <p className="eyebrow">МЕСТО ПРОВЕДЕНИЯ ЦЕРЕМОНИИ</p>
-              <img src={ASSETS.church} alt="ЗАГС улица Миллера, 58" />
+              <img
+                src={ASSETS.church}
+                alt="ЗАГС улица Миллера, 58"
+                loading="lazy"
+                decoding="async"
+              />
               <p className="address">{WEDDING.churchAddress}</p>
               <button type="button" onClick={() => setMap("church")}>Открыть карту</button>
             </article>
             <article className="location-card reveal">
               <p className="eyebrow">БАНКЕТ В РЕСТОРАНЕ</p>
-              <img src={ASSETS.restaurant} alt="Банкетный зал Чистые пруды" />
+              <img
+                src={ASSETS.restaurant}
+                alt="Банкетный зал Чистые пруды"
+                loading="lazy"
+                decoding="async"
+              />
               <p className="address">{WEDDING.venueAddress}</p>
               <button type="button" onClick={() => setMap("venue")}>Открыть карту</button>
             </article>
@@ -449,7 +473,12 @@ export default function Home() {
             >
               ‹
             </button>
-            <img src={ASSETS.dress[slide]} alt="Пример спокойного свадебного образа" />
+            <img
+              src={ASSETS.dress[slide]}
+              alt="Пример спокойного свадебного образа"
+              loading="lazy"
+              decoding="async"
+            />
             <button
               type="button"
               aria-label="Следующее фото"
@@ -494,6 +523,8 @@ export default function Home() {
               <img
                 src={ASSETS.history.bouquet}
                 alt="Мужчина протягивает любимой большой букет цветов"
+                loading="lazy"
+                decoding="async"
               />
               <figcaption>ПЕРВАЯ ВСТРЕЧА</figcaption>
             </figure>
@@ -520,6 +551,8 @@ export default function Home() {
               <img
                 src={ASSETS.history.road}
                 alt="Влюблённые идут вместе по дороге между двумя городами"
+                loading="lazy"
+                decoding="async"
               />
               <figcaption>ДВА ГОРОДА — ОДНА ИСТОРИЯ</figcaption>
             </figure>
@@ -544,6 +577,8 @@ export default function Home() {
               <img
                 src={ASSETS.history.proposal}
                 alt="Предложение руки и сердца во время зимнего путешествия"
+                loading="lazy"
+                decoding="async"
               />
               <figcaption>АРМЕНИЯ · НОВАЯ ГЛАВА</figcaption>
             </figure>
@@ -567,6 +602,8 @@ export default function Home() {
                 className="details-photo"
                 src={ASSETS.detailsPhoto}
                 alt="Свадебные кольца на руках молодожёнов"
+                loading="lazy"
+                decoding="async"
               />
             </article>
             <article className="detail-card reveal">
