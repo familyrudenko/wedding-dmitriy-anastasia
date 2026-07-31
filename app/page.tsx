@@ -15,7 +15,7 @@ const ASSETS = {
   detailsPhoto: "/assets/details-placeholder.webp",
   history: {
     bouquet: "/assets/history-bouquet.webp",
-    road: "/assets/history-road.webp",
+    road: "/assets/history-road-7.webp",
     proposal: "/assets/history-proposal.webp",
   },
   dress: [
