@@ -13,6 +13,7 @@ const ASSETS = {
   music: "/assets/music.mp3",
   church: "/assets/venue-2.jpg",
   restaurant: "/assets/venue-1.jpg",
+  detailsPhoto: "/assets/details-placeholder.jpg",
   dress: [
     "/assets/dress-1.png",
     "/assets/dress-2.jpg",
@@ -468,12 +469,12 @@ export default function Home() {
         <section className="details section-shell">
           <h2 className="section-title reveal">DETAILS</h2>
           <div className="details-grid">
-            <article className="detail-card reveal">
-              <p>
-                Так как мы уже обустроили наш совместный быт, будем благодарны
-                за денежный подарок, который поможет нам в осуществлении наших
-                семейных планов.
-              </p>
+            <article className="detail-card detail-photo-card reveal">
+              <img
+                className="details-photo"
+                src={ASSETS.detailsPhoto}
+                alt="Свадебные кольца на руках молодожёнов"
+              />
             </article>
             <article className="detail-card reveal">
               <p>
