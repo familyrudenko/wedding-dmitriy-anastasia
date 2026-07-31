@@ -624,7 +624,7 @@ export default function Home() {
           {sent ? (
             <div className="success reveal is-visible" role="status">
               <span>СПАСИБО!</span>
-              <p>Ваш ответ отправлен Сергею и Наталии.</p>
+              <p>Ваш ответ отправлен Дмитрию и Анастасии.</p>
               <button type="button" onClick={() => setSent(false)}>Заполнить ещё раз</button>
             </div>
           ) : (
