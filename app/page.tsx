@@ -427,7 +427,6 @@ export default function Home() {
 
         <section className="dress section-shell">
           <div className="dress-copy reveal">
-            <p className="eyebrow">сентябрь</p>
             <h2 className="section-title">DRESS CODE</h2>
             <p>
               Мы рады сообщить, что дресс-кода на нашей свадьбе не будет. Тем

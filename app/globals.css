@@ -1291,7 +1291,7 @@ footer span {
 
   .locations {
     padding-top: 36px;
-    padding-bottom: 42px;
+    padding-bottom: 12px;
   }
 
   .location-grid {
@@ -1307,7 +1307,7 @@ footer span {
 
   .dress {
     display: block;
-    padding-top: 42px;
+    padding-top: 20px;
     padding-bottom: 45px;
   }
 
