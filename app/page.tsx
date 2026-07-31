@@ -21,10 +21,10 @@ const ASSETS = {
     proposal: "/assets/history-proposal-8.webp",
   },
   dress: [
-    "/assets/dress-1.webp",
-    "/assets/dress-2.webp",
-    "/assets/dress-3.webp",
-    "/assets/dress-4.webp",
+    "/assets/dress-palette-3.webp",
+    "/assets/dress-palette-4.webp",
+    "/assets/dress-palette-5.webp",
+    "/assets/dress-palette-6.webp",
   ],
 };
 
