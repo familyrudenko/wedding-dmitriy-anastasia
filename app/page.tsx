@@ -12,7 +12,7 @@ const ASSETS = {
   music: "/assets/wedding-music-128.mp3",
   church: "/assets/ceremony-rings.webp",
   restaurant: "/assets/banquet-restaurant.webp",
-  detailsPhoto: "/assets/details-placeholder.webp",
+  detailsPhoto: "/assets/details-photo-9.webp",
   history: {
     bouquet: "/assets/history-bouquet.webp",
     road: "/assets/history-road-7.webp",
