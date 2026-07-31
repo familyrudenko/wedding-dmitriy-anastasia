@@ -74,6 +74,7 @@ export default function Home() {
   const pointerOffsetRef = useRef(0);
   const unlockingRef = useRef(false);
   const unlockTimerRef = useRef<number | null>(null);
+  const dressPreloadRef = useRef<HTMLImageElement[]>([]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setCountdown(getCountdown()), 1000);
@@ -133,6 +134,18 @@ export default function Home() {
     [countdown],
   );
 
+  function preloadDressImages() {
+    if (dressPreloadRef.current.length > 0) return;
+
+    dressPreloadRef.current = ASSETS.dress.map((src) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = src;
+      void image.decode().catch(() => undefined);
+      return image;
+    });
+  }
+
   function unlock() {
     if (unlocked || unlockingRef.current) return;
 
@@ -145,6 +158,7 @@ export default function Home() {
     setIsDragging(false);
     setUnlocking(true);
     setSlider(100);
+    preloadDressImages();
     playAttempt
       ?.then(() => setPlaying(true))
       .catch(() => setPlaying(false));
