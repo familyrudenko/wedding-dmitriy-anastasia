@@ -14,6 +14,11 @@ const ASSETS = {
   church: "/assets/venue-2.jpg",
   restaurant: "/assets/venue-1.jpg",
   detailsPhoto: "/assets/details-placeholder.jpg",
+  history: {
+    bouquet: "/assets/history-bouquet.jpg",
+    road: "/assets/history-road.jpg",
+    proposal: "/assets/history-proposal.jpg",
+  },
   dress: [
     "/assets/dress-1.png",
     "/assets/dress-2.jpg",
@@ -463,6 +468,94 @@ export default function Home() {
                 />
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="history section-shell">
+          <div className="history-heading reveal">
+            <p className="eyebrow">НАША ИСТОРИЯ</p>
+            <h2 className="section-title history-title">
+              <span>HISTORY</span>
+              <span>LOVE</span>
+            </h2>
+          </div>
+
+          <div className="history-stream">
+            <article className="history-copy history-copy-left reveal">
+              <span className="history-step">01</span>
+              <p>
+                Иногда судьба приходит совсем неожиданно. Незадолго до их
+                знакомства цыганка остановила её на улице и сказала: «Совсем
+                скоро ты встретишь свою любовь».
+              </p>
+            </article>
+
+            <figure className="history-photo history-photo-right reveal">
+              <img
+                src={ASSETS.history.bouquet}
+                alt="Мужчина протягивает любимой большой букет цветов"
+              />
+              <figcaption>ПЕРВАЯ ВСТРЕЧА</figcaption>
+            </figure>
+
+            <article className="history-copy history-copy-right reveal">
+              <span className="history-step">02</span>
+              <p>
+                Вскоре в её жизни появился он — с большим букетом цветов и
+                сердцем, полным решимости, мчащийся к ней из Симферополя в
+                Севастополь.
+              </p>
+            </article>
+
+            <article className="history-copy history-copy-left reveal">
+              <span className="history-step">03</span>
+              <p>
+                Их история началась между двумя городами, дорогами и
+                долгожданными встречами. Каждую неделю он приезжал к ней, а
+                расстояние лишь сильнее сближало их сердца.
+              </p>
+            </article>
+
+            <figure className="history-photo history-photo-left reveal">
+              <img
+                src={ASSETS.history.road}
+                alt="Влюблённые идут вместе по дороге между двумя городами"
+              />
+              <figcaption>ДВА ГОРОДА — ОДНА ИСТОРИЯ</figcaption>
+            </figure>
+
+            <article className="history-copy history-copy-right reveal">
+              <span className="history-step">04</span>
+              <p>
+                Совсем скоро они поняли: друг без друга уже невозможно. Она
+                переехала к нему — и два разных города стали одним общим домом.
+              </p>
+            </article>
+
+            <article className="history-copy history-copy-left reveal">
+              <span className="history-step">05</span>
+              <p>
+                Спустя два года, во время новогоднего путешествия по Армении,
+                среди огней, гор и зимнего волшебства он сделал ей предложение.
+              </p>
+            </article>
+
+            <figure className="history-photo history-photo-right reveal">
+              <img
+                src={ASSETS.history.proposal}
+                alt="Предложение руки и сердца во время зимнего путешествия"
+              />
+              <figcaption>АРМЕНИЯ · НОВАЯ ГЛАВА</figcaption>
+            </figure>
+
+            <article className="history-copy history-final reveal">
+              <span className="history-step">∞</span>
+              <p>
+                Так началась новая глава истории о любви, когда-то предсказанной
+                судьбой. И теперь они приглашают вас разделить самый важный и
+                счастливый день — день их свадьбы.
+              </p>
+            </article>
           </div>
         </section>
 
