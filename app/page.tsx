@@ -225,11 +225,12 @@ export default function Home() {
     return value;
   }
 
-  const selectedMapAddress =
-    map === "church" ? WEDDING.churchAddress : WEDDING.venueAddress;
-  const mapUrl = `https://yandex.ru/map-widget/v1/?mode=search&text=${encodeURIComponent(
-    selectedMapAddress,
-  )}&z=17`;
+  const mapUrl =
+    map === "church"
+      ? `https://yandex.ru/map-widget/v1/?mode=search&text=${encodeURIComponent(
+          WEDDING.churchAddress,
+        )}&z=17`
+      : "https://yandex.ru/map-widget/v1/org/dayana/1664317555/?z=17&maptype=map";
 
   return (
     <>
