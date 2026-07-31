@@ -225,10 +225,11 @@ export default function Home() {
     return value;
   }
 
-  const mapUrl =
-    map === "church"
-      ? "https://yandex.ru/map-widget/v1/org/khram_rozhdestva_ioanna_predtechi_v_yukkakh/1131454657/?ll=30.285451%2C60.109657&z=15"
-      : "https://yandex.ru/map-widget/v1/org/amulet/72706144645/?ll=30.282029%2C59.852863&z=15";
+  const selectedMapAddress =
+    map === "church" ? WEDDING.churchAddress : WEDDING.venueAddress;
+  const mapUrl = `https://yandex.ru/map-widget/v1/?mode=search&text=${encodeURIComponent(
+    selectedMapAddress,
+  )}&z=17`;
 
   return (
     <>
