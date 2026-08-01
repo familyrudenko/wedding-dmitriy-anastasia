@@ -18,8 +18,7 @@ const vinextCli = join(projectRoot, "node_modules", "vinext", "dist", "cli.js");
 const outputDirectory = join(projectRoot, "dist", "beget");
 const clientDirectory = join(projectRoot, "dist", "client");
 const serverEntry = join(projectRoot, "dist", "server", "index.js");
-const defaultSiteUrl =
-  "https://wedding-dmitriy-anastasia.familyrudenko.workers.dev";
+const defaultSiteUrl = "https://rudenko-family.ru";
 const defaultRsvpEndpoint = "https://92.118.170.205:8443/api/rsvp";
 const siteUrl = (process.env.BEGET_SITE_URL || defaultSiteUrl).replace(/\/$/, "");
 const rsvpEndpoint =
@@ -129,7 +128,10 @@ if (!response.ok) {
   throw new Error(`Unable to render static HTML: ${response.status}`);
 }
 
-const html = await response.text();
+const html = (await response.text()).replaceAll(
+  "http://localhost:3000",
+  siteUrl,
+);
 await rm(outputDirectory, { recursive: true, force: true });
 await mkdir(outputDirectory, { recursive: true });
 await cp(clientDirectory, outputDirectory, { recursive: true });
