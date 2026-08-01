@@ -2,6 +2,9 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
+const RSVP_ENDPOINT =
+  process.env.NEXT_PUBLIC_RSVP_ENDPOINT?.trim() || "/api/rsvp";
+
 // Все заменяемые файлы собраны здесь.
 const ASSETS = {
   silk: "/assets/silk-frame.webp",
@@ -192,7 +195,7 @@ export default function Home() {
     const data = new FormData(form);
 
     try {
-      const response = await fetch("/api/rsvp", {
+      const response = await fetch(RSVP_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
