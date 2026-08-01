@@ -9,28 +9,28 @@ export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = host ? `${protocol}://${host}` : "http://localhost:3000";
 
   return {
-    title: "Приглашение на свадьбу — Сергей и Наталия",
-    description: "Свадебное приглашение Сергея и Наталии",
+    title: "Приглашение на свадьбу — Дмитрий и Анастасия",
+    description: "Свадебное приглашение Дмитрия и Анастасии",
     icons: {
       icon: "/favicon.svg",
     },
     openGraph: {
-      title: "Сергей и Наталия — 14 сентября 2025",
+      title: "Дмитрий и Анастасия — 26 сентября 2026",
       description: "Приглашаем вас разделить с нами этот особенный день.",
       images: [
         {
-          url: `${baseUrl}/og.png`,
+          url: `${baseUrl}/og-dmitriy-anastasia.webp`,
           width: 1536,
           height: 1024,
-          alt: "Сергей и Наталия — свадебное приглашение",
+          alt: "Дмитрий и Анастасия — свадебное приглашение",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Сергей и Наталия — 14 сентября 2025",
+      title: "Дмитрий и Анастасия — 26 сентября 2026",
       description: "Приглашаем вас разделить с нами этот особенный день.",
-      images: [`${baseUrl}/og.png`],
+      images: [`${baseUrl}/og-dmitriy-anastasia.webp`],
     },
   };
 }
